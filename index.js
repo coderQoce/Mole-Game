@@ -55,7 +55,7 @@ function setMole() {
     if (currMoleTile) currMoleTile.innerHTML = "";
 
     let mole = document.createElement("img");
-    mole.src = "./hacker.jpg";
+    mole.src = "./hacker.png";
 
     let num = getRandomTile();
     if (currPlantTile && currPlantTile.id === num) return;
