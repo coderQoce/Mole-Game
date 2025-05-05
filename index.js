@@ -44,19 +44,16 @@ function getRandomTile() {
 
 function setMole() {
     if (gameOver) return;
+    if (currMoleTile) currMoleTile.innerHTML = "";
 
-    if (currMoleTile && currMoleTile.firstChild) {
-        currMoleTile.firstChild.classList.add("pop-out");
-        setTimeout(() => {
-            if (currMoleTile) currMoleTile.innerHTML = "";
-        }, 250);
-    }
+    let num;
+    do {
+        num = getRandomTile();
+    } while (currPlantTile && currPlantTile.id === num);
 
     let mole = document.createElement("img");
     mole.src = "./hacker.png";
-
-    let num = getRandomTile();
-    if (currPlantTile && currPlantTile.id === num) return;
+    mole.classList.add("pop");
 
     currMoleTile = document.getElementById(num);
     currMoleTile.innerHTML = "";
@@ -65,19 +62,16 @@ function setMole() {
 
 function setPlant() {
     if (gameOver) return;
+    if (currPlantTile) currPlantTile.innerHTML = "";
 
-    if (currPlantTile && currPlantTile.firstChild) {
-        currPlantTile.firstChild.classList.add("pop-out");
-        setTimeout(() => {
-            if (currPlantTile) currPlantTile.innerHTML = "";
-        }, 250);
-    }
+    let num;
+    do {
+        num = getRandomTile();
+    } while (currMoleTile && currMoleTile.id === num);
 
     let plant = document.createElement("img");
     plant.src = "./plant.jpg";
-
-    let num = getRandomTile();
-    if (currMoleTile && currMoleTile.id === num) return;
+    plant.classList.add("pop");
 
     currPlantTile = document.getElementById(num);
     currPlantTile.innerHTML = "";
