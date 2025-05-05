@@ -72,7 +72,7 @@ function handleTileClick() {
         document.getElementById("score").innerText = score.toString();
         adjustDifficulty(score);
     } else if (this === currPlantTile) {
-        endGame("Hit a Plant");
+        endGame("Hit a Plant!!");
     } else {
         wrongTileClicks++;
         hearts--;

@@ -94,25 +94,6 @@ body {
 .game-buttons {
     margin-top: 10px;
 }
-
-/* #restartBtn, #shareBtn {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    background-color: orange;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    transition: 0.3s ease;
-} */
-
-#restartBtn:hover, #shareBtn:hover {
-    background-color: #ff7700;
-}
-
 @keyframes popIn {
     0% {
         transform: translateY(100%);
