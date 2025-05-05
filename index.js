@@ -11,19 +11,10 @@ let plantInterval;
 
 window.onload = function () {
     setGame();
-
-    document.getElementById("restartBtn").addEventListener("click", () => {
-        location.reload();
-    });
-
-    document.getElementById("shareBtn").addEventListener("click", () => {
-        const tweetText = `I scored ${score} points in Whack The Hacker! Can you beat me? Play here: https://mole-game-alpha.vercel.app`;
-        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
-        window.open(tweetUrl, "_blank");
-    });
-}
+};
 
 function setGame() {
+    // Create game tiles
     for (let i = 0; i < 9; i++) {
         let tile = document.createElement("div");
         tile.id = i.toString();
@@ -44,16 +35,14 @@ function getRandomTile() {
 
 function setMole() {
     if (gameOver) return;
-    if (currMoleTile) currMoleTile.innerHTML = "";
 
-    let num;
-    do {
-        num = getRandomTile();
-    } while (currPlantTile && currPlantTile.id === num);
+    if (currMoleTile) currMoleTile.innerHTML = "";
 
     let mole = document.createElement("img");
     mole.src = "./hacker.png";
-    mole.classList.add("pop");
+
+    let num = getRandomTile();
+    if (currPlantTile && currPlantTile.id === num) return;
 
     currMoleTile = document.getElementById(num);
     currMoleTile.innerHTML = "";
@@ -62,16 +51,14 @@ function setMole() {
 
 function setPlant() {
     if (gameOver) return;
-    if (currPlantTile) currPlantTile.innerHTML = "";
 
-    let num;
-    do {
-        num = getRandomTile();
-    } while (currMoleTile && currMoleTile.id === num);
+    if (currPlantTile) currPlantTile.innerHTML = "";
 
     let plant = document.createElement("img");
     plant.src = "./plant.jpg";
-    plant.classList.add("pop");
+
+    let num = getRandomTile();
+    if (currMoleTile && currMoleTile.id === num) return;
 
     currPlantTile = document.getElementById(num);
     currPlantTile.innerHTML = "";
@@ -94,7 +81,7 @@ function selectTile() {
     } else {
         wrongTileClicks++;
         hearts--;
-        updateHeartsDisplay(); 
+        updateHeartsDisplay();
         if (wrongTileClicks >= 3 || hearts <= 0) {
             endGame("GGS");
         }
@@ -144,4 +131,11 @@ function endGame(reason) {
     clearInterval(moleInterval);
     clearInterval(plantInterval);
     document.getElementById("score").innerText = `GAME OVER! ${score} (${reason})`;
+
+    // Show restart button
+    document.getElementById("restartBtn").style.display = "inline-block";
+}
+
+function restartGame() {
+    window.location.reload();
 }
