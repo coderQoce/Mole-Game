@@ -4,17 +4,26 @@ let score = 0;
 let gameOver = false;
 let missedMoles = 0;
 let wrongTileClicks = 0;
-let hearts = 3; 
+let hearts = 3;
 
 let moleInterval;
 let plantInterval;
 
 window.onload = function () {
     setGame();
+
+    document.getElementById("restartBtn").addEventListener("click", () => {
+        location.reload();
+    });
+
+    document.getElementById("shareBtn").addEventListener("click", () => {
+        const tweetText = `I scored ${score} points in Whack The Hacker! Can you beat me? Play here: https://mole-game-alpha.vercel.app`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        window.open(tweetUrl, "_blank");
+    });
 }
 
 function setGame() {
- 
     for (let i = 0; i < 9; i++) {
         let tile = document.createElement("div");
         tile.id = i.toString();
@@ -23,7 +32,6 @@ function setGame() {
         document.getElementById("board").appendChild(tile);
     }
 
-    
     updateHeartsDisplay();
 
     moleInterval = setInterval(setMole, 1500);
@@ -37,22 +45,12 @@ function getRandomTile() {
 function setMole() {
     if (gameOver) return;
 
-    // if (currMoleTile && currMoleTile.innerHTML !== "") {
-    //     missedMoles++;
-    //     if (missedMoles >= 3) {
-    //         endGame("GGS");
-    //         return;
-    //     }else {
-    //         wrongTileClicks++;
-    //         hearts--;
-    //         updateHeartsDisplay(); 
-    //         if (wrongTileClicks >= 3 || hearts <= 0) {
-    //             endGame("GGS");
-    //         }
-    //     }
-    // }
-
-    if (currMoleTile) currMoleTile.innerHTML = "";
+    if (currMoleTile && currMoleTile.firstChild) {
+        currMoleTile.firstChild.classList.add("pop-out");
+        setTimeout(() => {
+            if (currMoleTile) currMoleTile.innerHTML = "";
+        }, 250);
+    }
 
     let mole = document.createElement("img");
     mole.src = "./hacker.png";
@@ -68,7 +66,12 @@ function setMole() {
 function setPlant() {
     if (gameOver) return;
 
-    if (currPlantTile) currPlantTile.innerHTML = "";
+    if (currPlantTile && currPlantTile.firstChild) {
+        currPlantTile.firstChild.classList.add("pop-out");
+        setTimeout(() => {
+            if (currPlantTile) currPlantTile.innerHTML = "";
+        }, 250);
+    }
 
     let plant = document.createElement("img");
     plant.src = "./plant.jpg";
@@ -131,10 +134,7 @@ function adjustSpeed(score) {
     }
 }
 
-// heart implementation
-
 function updateHeartsDisplay() {
-    // Clear previous hearts
     let heartDisplay = document.getElementById("hearts");
     heartDisplay.innerHTML = "";
 
