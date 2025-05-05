@@ -95,7 +95,7 @@ body {
     margin-top: 10px;
 }
 
-#restartBtn, #shareBtn {
+/* #restartBtn, #shareBtn {
     margin: 5px;
     padding: 10px 20px;
     font-size: 14px;
@@ -107,7 +107,7 @@ body {
     cursor: pointer;
     text-decoration: none;
     transition: 0.3s ease;
-}
+} */
 
 #restartBtn:hover, #shareBtn:hover {
     background-color: #ff7700;

@@ -2,125 +2,113 @@ let currMoleTile;
 let currPlantTile;
 let score = 0;
 let gameOver = false;
-let missedMoles = 0;
 let wrongTileClicks = 0;
 let hearts = 3;
 
 let moleInterval;
 let plantInterval;
 
-window.onload = function () {
-    setGame();
+window.onload = () => {
+    initializeGame();
 };
 
-function setGame() {
-    // Create game tiles
+function initializeGame() {
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+
     for (let i = 0; i < 9; i++) {
-        let tile = document.createElement("div");
+        const tile = document.createElement("div");
         tile.id = i.toString();
         tile.classList.add("tile");
-        tile.addEventListener("click", selectTile);
-        document.getElementById("board").appendChild(tile);
+        tile.addEventListener("click", handleTileClick);
+        board.appendChild(tile);
     }
 
-    updateHeartsDisplay();
-
-    moleInterval = setInterval(setMole, 1500);
-    plantInterval = setInterval(setPlant, 2500);
+    updateHearts();
+    moleInterval = setInterval(spawnMole, 1500);
+    plantInterval = setInterval(spawnPlant, 2500);
 }
 
-function getRandomTile() {
+function getRandomTileID() {
     return Math.floor(Math.random() * 9).toString();
 }
 
-function setMole() {
+function spawnMole() {
     if (gameOver) return;
-
     if (currMoleTile) currMoleTile.innerHTML = "";
 
-    let mole = document.createElement("img");
+    const mole = document.createElement("img");
     mole.src = "./hacker.png";
 
-    let num = getRandomTile();
-    if (currPlantTile && currPlantTile.id === num) return;
+    const tileId = getRandomTileID();
+    if (currPlantTile && currPlantTile.id === tileId) return;
 
-    currMoleTile = document.getElementById(num);
+    currMoleTile = document.getElementById(tileId);
     currMoleTile.innerHTML = "";
     currMoleTile.appendChild(mole);
 }
 
-function setPlant() {
+function spawnPlant() {
     if (gameOver) return;
-
     if (currPlantTile) currPlantTile.innerHTML = "";
 
-    let plant = document.createElement("img");
+    const plant = document.createElement("img");
     plant.src = "./plant.jpg";
 
-    let num = getRandomTile();
-    if (currMoleTile && currMoleTile.id === num) return;
+    const tileId = getRandomTileID();
+    if (currMoleTile && currMoleTile.id === tileId) return;
 
-    currPlantTile = document.getElementById(num);
+    currPlantTile = document.getElementById(tileId);
     currPlantTile.innerHTML = "";
     currPlantTile.appendChild(plant);
 }
 
-function selectTile() {
+function handleTileClick() {
     if (gameOver) return;
 
     if (this === currMoleTile) {
         score += 10;
-        missedMoles = 0;
         wrongTileClicks = 0;
         document.getElementById("score").innerText = score.toString();
-
-        adjustSpeed(score);
-
+        adjustDifficulty(score);
     } else if (this === currPlantTile) {
-        endGame("GGS");
+        endGame("Hit a Plant");
     } else {
         wrongTileClicks++;
         hearts--;
-        updateHeartsDisplay();
+        updateHearts();
+
         if (wrongTileClicks >= 3 || hearts <= 0) {
-            endGame("GGS");
+            endGame("Too Many Misses");
         }
     }
 }
 
-function adjustSpeed(score) {
+function adjustDifficulty(score) {
     if ([50, 100, 150, 200].includes(score)) {
         clearInterval(moleInterval);
         clearInterval(plantInterval);
 
-        let moleSpeed = 1500;
-        let plantSpeed = 2500;
+        const speeds = {
+            50: [1000, 2000],
+            100: [800, 1600],
+            150: [600, 1400],
+            200: [400, 1000]
+        };
 
-        if (score === 50) {
-            moleSpeed = 1000;
-            plantSpeed = 2000;
-        } else if (score === 100) {
-            moleSpeed = 800;
-            plantSpeed = 1600;
-        } else if (score === 150) {
-            moleSpeed = 600;
-            plantSpeed = 1400;
-        } else if (score === 200) {
-            moleSpeed = 400;
-            plantSpeed = 1000;
-        }
+        const [moleSpeed, plantSpeed] = speeds[score] || [1500, 2500];
 
-        moleInterval = setInterval(setMole, moleSpeed);
-        plantInterval = setInterval(setPlant, plantSpeed);
+        moleInterval = setInterval(spawnMole, moleSpeed);
+        plantInterval = setInterval(spawnPlant, plantSpeed);
     }
 }
 
-function updateHeartsDisplay() {
-    let heartDisplay = document.getElementById("hearts");
+function updateHearts() {
+    const heartDisplay = document.getElementById("hearts");
     heartDisplay.innerHTML = "";
 
     for (let i = 0; i < hearts; i++) {
-        let heart = document.createElement("img");
+        const heart = document.createElement("img");
         heart.src = "./heart.jpg";
         heartDisplay.appendChild(heart);
     }
@@ -130,10 +118,23 @@ function endGame(reason) {
     gameOver = true;
     clearInterval(moleInterval);
     clearInterval(plantInterval);
-    document.getElementById("score").innerText = `GAME OVER! ${score} (${reason})`;
 
-    // Show restart button
+    const finalScore = `GAME OVER! ${score} (${reason})`;
+    document.getElementById("score").innerText = finalScore;
+
     document.getElementById("restartBtn").style.display = "inline-block";
+    document.getElementById("shareBtn").style.display = "inline-block";
+
+    setupTwitterShare(score);
+}
+
+function setupTwitterShare(score) {
+    const tweet = `I scored ${score} points in the Mole Game! Can you beat me? 🕹️ #MoleGame`;
+    const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
+
+    document.getElementById("shareBtn").onclick = () => {
+        window.open(twitterURL, "_blank");
+    };
 }
 
 function restartGame() {
