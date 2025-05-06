@@ -17,7 +17,16 @@ bgMusic.loop = true;
 
 window.onload = () => {
     initializeGame();
+
+    // Start background music only after user clicks (required by most browsers)
+    document.body.addEventListener("click", startBackgroundMusic, { once: true });
 };
+
+function startBackgroundMusic() {
+    bgMusic.play().catch(err => {
+        console.log("Background music autoplay blocked:", err);
+    });
+}
 
 function initializeGame() {
     const board = document.getElementById("board");
@@ -35,9 +44,6 @@ function initializeGame() {
 
     moleInterval = setInterval(spawnMole, 1500);
     plantInterval = setInterval(spawnPlant, 2500);
-
-    // Start background music
-    bgMusic.play();
 }
 
 function getRandomTileID() {
@@ -84,7 +90,7 @@ function handleTileClick() {
         hitMoleSound.play();
         adjustDifficulty(score);
     } else if (this === currPlantTile) {
-        hitPlantSound.play();
+        gameOverSound.play();
         endGame("Hit a Plant!!");
     } else {
         hitPlantSound.play();
