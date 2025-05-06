@@ -127,15 +127,15 @@ function endGame(reason) {
 
     setupTwitterShare(score);
 }
-
 function setupTwitterShare(score) {
-    const tweet = `I scored ${score} points in the Mole Game! Can you beat me? 🕹️ #MoleGame`;
+    const tweet = `I scored ${score} points in the Mole Game! 🕹️ Can you beat my score? Play here: https://mole-game-alpha.vercel.app/ #MoleGame`;
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
 
     document.getElementById("shareBtn").onclick = () => {
         window.open(twitterURL, "_blank");
     };
 }
+
 
 function restartGame() {
     window.location.reload();
