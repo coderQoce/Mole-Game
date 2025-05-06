@@ -87,6 +87,7 @@ function handleTileClick() {
         hitPlantSound.play();
         endGame("Hit a Plant!!");
     } else {
+        hitPlantSound.play();
         wrongTileClicks++;
         hearts--;
         updateHearts();
