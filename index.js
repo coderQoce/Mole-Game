@@ -8,6 +8,13 @@ let hearts = 3;
 let moleInterval;
 let plantInterval;
 
+// Sound effects
+const hitMoleSound = new Audio("./sounds/hacker-hit.mp3");
+const hitPlantSound = new Audio("./sounds/plant-hit.mp3");
+const gameOverSound = new Audio("./sounds/game-over.mp3");
+const bgMusic = new Audio("./sounds/background-music.mp3");
+bgMusic.loop = true;
+
 window.onload = () => {
     initializeGame();
 };
@@ -25,8 +32,12 @@ function initializeGame() {
     }
 
     updateHearts();
+
     moleInterval = setInterval(spawnMole, 1500);
     plantInterval = setInterval(spawnPlant, 2500);
+
+    // Start background music
+    bgMusic.play();
 }
 
 function getRandomTileID() {
@@ -70,8 +81,10 @@ function handleTileClick() {
         score += 10;
         wrongTileClicks = 0;
         document.getElementById("score").innerText = score.toString();
+        hitMoleSound.play();
         adjustDifficulty(score);
     } else if (this === currPlantTile) {
+        hitPlantSound.play();
         endGame("Hit a Plant!!");
     } else {
         wrongTileClicks++;
@@ -118,6 +131,8 @@ function endGame(reason) {
     gameOver = true;
     clearInterval(moleInterval);
     clearInterval(plantInterval);
+    bgMusic.pause();
+    gameOverSound.play();
 
     const finalScore = `GAME OVER! ${score} (${reason})`;
     document.getElementById("score").innerText = finalScore;
@@ -127,6 +142,7 @@ function endGame(reason) {
 
     setupTwitterShare(score);
 }
+
 function setupTwitterShare(score) {
     const tweet = `I scored ${score} points in the Mole Game! 🕹️ Can you beat my score? Play here: https://mole-game-alpha.vercel.app/ #MoleGame`;
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`;
@@ -135,7 +151,6 @@ function setupTwitterShare(score) {
         window.open(twitterURL, "_blank");
     };
 }
-
 
 function restartGame() {
     window.location.reload();
