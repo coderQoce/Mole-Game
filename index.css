@@ -1,20 +1,20 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    background: url("./bg.jpg");
+    background: url("./bg.jpg") no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: orange;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
+/* Game Board Container */
 #board {
     width: 90vw;
     max-width: 540px;
-    aspect-ratio: 1 / 1; 
-    background: url(./soil.png);
+    aspect-ratio: 1 / 1;
+    background: url("./soil.png") center center no-repeat;
     background-size: cover;
     border: 3px solid #fff;
     border-radius: 25px;
@@ -23,14 +23,16 @@ body {
     flex-wrap: wrap;
 }
 
+/*  Tiles */
 #board div {
     width: 33.33%;
     height: 33.33%;
-    background: url(./pipe.png);
+    background: url("./pipe.png") center center no-repeat;
     background-size: cover;
     box-sizing: border-box;
 }
 
+/* Tile Images (hacker and Plant) */
 #board div img {
     width: 60%;
     height: 60%;
@@ -39,12 +41,7 @@ body {
     margin-top: 10%;
 }
 
-#hearts img {
-    width: 25px;
-    height: 25px;
-    margin: 0 5px;
-}
-
+/* Hearts Display */
 #hearts {
     font-size: 18px;
     color: orange;
@@ -52,6 +49,13 @@ body {
     margin: 10px 0;
 }
 
+#hearts img {
+    width: 25px;
+    height: 25px;
+    margin: 0 5px;
+}
+
+/* Social and Utility Links */
 .links {
     display: flex;
     justify-content: center;
@@ -91,9 +95,7 @@ body {
     font-size: 20px;
 }
 
-.game-buttons {
-    margin-top: 10px;
-}
+/* Tile Animation Effects */
 @keyframes popIn {
     0% {
         transform: translateY(100%);
@@ -129,6 +131,7 @@ body {
     animation: popOut 0.25s ease-in forwards;
 }
 
+/* Responsiveness */
 @media (max-width: 768px) {
     #board div img {
         width: 70%;
